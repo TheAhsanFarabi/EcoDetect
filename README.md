@@ -15,7 +15,8 @@ EcoDetect is a lightweight, scalable waste classification framework based on **Y
 
 ## 🧰 Pipeline Overview
 
-![Pipeline](assets/pipeline.png)
+<img src="assets/pipeline.png" alt="Pipeline" style="width:60%; max-width:600px;"/>
+
 
 ---
 
