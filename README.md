@@ -8,7 +8,7 @@ EcoDetect is a lightweight, scalable waste classification framework based on **Y
 
 - ⚡ Real-time detection (<3 ms/image) on edge devices
 - 🧠 YOLOv11n fine-tuned for 3 recyclable classes: plastic, paper, aluminum
-- 🏭 Dataset generated using Stable Diffusion + Roboflow pipeline
+- 🏭 Dataset generated using LLM + Roboflow pipeline
 - 🔬 Strong generalization: trained synthetic, tested real-world
 
 ---
