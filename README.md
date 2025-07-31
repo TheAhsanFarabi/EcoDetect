@@ -1,4 +1,4 @@
-# EcoDetect: Real-Time Recyclable Waste Detection on Edge Devices
+# EcoDetect: Real-Time Recyclable Waste Detection Using YOLOv11n and Synthetic Data
 
 EcoDetect is a lightweight, scalable waste classification framework based on **YOLOv11n**, designed for **real-time deployment on edge devices** such as Raspberry Pi 5 and Jetson Nano. The model is trained entirely on **synthetic images** generated using LLM-guided prompt engineering, requiring no manual data collection.
 
