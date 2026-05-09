@@ -1,444 +1,1014 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>EcoDetect — ICCIT 2025</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EcoDetect — ICCIT 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0b;
+  --bg2:#111113;
+  --bg3:#18181c;
+  --bg4:#1f1f25;
+  --border:#2a2a32;
+  --border2:#3a3a45;
+  --txt:#e8e8ee;
+  --txt2:#9898a8;
+  --txt3:#5a5a6a;
+  --accent:#7fff6f;
+  --accent2:#4fc580;
+  --accent3:#1a3d25;
+  --blue:#5b9cf6;
+  --amber:#f6c45b;
+  --coral:#f67b5b;
+  --r:12px;
+}
 
-  <meta name="description" content="EcoDetect: Lightweight Real-Time Recyclable Waste Detection Using YOLOv11n Trained on LLM-Guided Synthetic Data. ICCIT 2025.">
-  <meta name="citation_title" content="EcoDetect: Lightweight Real-Time Recyclable Waste Detection Using YOLOv11n Trained on LLM-Guided Synthetic Data">
-  <meta name="citation_author" content="Farabi, Ahsan">
-  <meta name="citation_author" content="Minhaz, Md. Abdul Ahad">
-  <meta name="citation_author" content="Khandaker, Israt">
-  <meta name="citation_author" content="Shanto, Ibrahim Khalil">
-  <meta name="citation_author" content="Raihan, Md. Tanvir">
-  <meta name="citation_publication_date" content="2025">
-  <meta name="citation_conference_title" content="2025 28th International Conference on Computer and Information Technology (ICCIT)">
+html{scroll-behavior:smooth}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--bg);
+  color:var(--txt);
+  font-size:16px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
 
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #fff;
-      color: #1a1a1a;
-      font-size: 16px;
-      line-height: 1.65;
-    }
+/* NOISE TEXTURE OVERLAY */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+  opacity:.5;
+}
 
-    a { color: #1a56db; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+/* GRID LINES */
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:80px 80px;
+  opacity:.15;
+  pointer-events:none;
+  z-index:0;
+}
 
-    .page {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem 5rem;
-    }
+.page{
+  max-width:900px;
+  margin:0 auto;
+  padding:0 2rem 6rem;
+  position:relative;
+  z-index:1;
+}
 
-    /* HEADER */
-    .venue {
-      font-size: 0.85rem;
-      color: #555;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
+/* HERO */
+.hero{
+  padding:6rem 0 4rem;
+  border-bottom:1px solid var(--border);
+}
 
-    h1 {
-      font-family: 'Source Serif 4', serif;
-      font-size: clamp(1.55rem, 3.5vw, 2.1rem);
-      font-weight: 600;
-      text-align: center;
-      line-height: 1.25;
-      color: #111;
-      margin-bottom: 1.5rem;
-    }
+.venue-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:var(--accent3);
+  border:1px solid var(--accent2);
+  color:var(--accent);
+  font-family:'DM Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:.08em;
+  padding:.3rem .8rem;
+  border-radius:999px;
+  margin-bottom:2rem;
+  text-transform:uppercase;
+}
 
-    .authors {
-      text-align: center;
-      font-size: 0.95rem;
-      color: #333;
-      margin-bottom: 0.4rem;
-    }
+.venue-badge::before{
+  content:'';
+  width:6px;height:6px;
+  background:var(--accent);
+  border-radius:50%;
+  animation:pulse 2s infinite;
+}
 
-    .authors span { margin: 0 0.25rem; }
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.5;transform:scale(.8)}
+}
 
-    .affil {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 2rem;
-    }
+h1{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(2rem,5vw,3.4rem);
+  font-weight:400;
+  line-height:1.15;
+  color:#fff;
+  margin-bottom:2rem;
+  letter-spacing:-.02em;
+}
 
-    /* LINKS */
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.55rem;
-      margin-bottom: 2.5rem;
-    }
+h1 em{
+  font-style:italic;
+  color:var(--accent);
+}
 
-    .link-btn {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.4rem 1rem;
-      border: 1.5px solid #ccc;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #222;
-      background: #fafafa;
-      transition: border-color 0.15s, background 0.15s, color 0.15s;
-    }
+.authors-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+  margin-bottom:.75rem;
+}
 
-    .link-btn:hover {
-      border-color: #1a56db;
-      background: #f0f5ff;
-      color: #1a56db;
-      text-decoration: none;
-    }
+.author-chip{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  color:var(--txt2);
+  padding:.2rem .7rem;
+  border-radius:999px;
+  font-size:.82rem;
+}
 
-    /* DIVIDER */
-    hr {
-      border: none;
-      border-top: 1px solid #e5e5e5;
-      margin: 2rem 0;
-    }
+.affil{
+  font-size:.82rem;
+  color:var(--txt3);
+  font-family:'DM Mono',monospace;
+  margin-bottom:2.5rem;
+}
 
-    /* SECTIONS */
-    h2 {
-      font-family: 'Source Serif 4', serif;
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #111;
-      margin-bottom: 0.75rem;
-    }
+/* LINKS */
+.links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+}
 
-    p { color: #333; margin-bottom: 0.75rem; }
-    p:last-child { margin-bottom: 0; }
+.link-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
+  padding:.45rem 1.1rem;
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  font-size:.82rem;
+  font-weight:500;
+  color:var(--txt2);
+  background:var(--bg3);
+  transition:all .2s;
+  letter-spacing:.02em;
+}
 
-    /* TAGS */
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 1rem;
-    }
+.link-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:var(--accent3);
+  text-decoration:none;
+}
 
-    .tag {
-      background: #f0f4f8;
-      border: 1px solid #d9e2ec;
-      color: #486581;
-      padding: 0.15rem 0.6rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-    }
+.link-btn svg{width:14px;height:14px;flex-shrink:0}
 
-    /* IMAGE BLOCKS */
-    .img-block {
-      margin-top: 1.25rem;
-    }
+/* SECTIONS */
+section{
+  padding:4rem 0 3rem;
+  border-bottom:1px solid var(--border);
+}
 
-    .img-block img {
-      width: 100%;
-      border: 1px solid #e1e4e8;
-      border-radius: 6px;
-      display: block;
-    }
+.section-label{
+  font-family:'DM Mono',monospace;
+  font-size:.7rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--accent2);
+  margin-bottom:1rem;
+}
 
-    /* placeholder shown when no image is provided */
-    .img-placeholder {
-      width: 100%;
-      border: 1.5px dashed #ccc;
-      border-radius: 6px;
-      background: #fafafa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #aaa;
-      font-size: 0.82rem;
-      text-align: center;
-      padding: 2.5rem 1rem;
-      font-style: italic;
-    }
+h2{
+  font-family:'DM Serif Display',serif;
+  font-size:1.9rem;
+  font-weight:400;
+  color:#fff;
+  line-height:1.2;
+  margin-bottom:1.5rem;
+  letter-spacing:-.02em;
+}
 
-    .img-caption {
-      font-size: 0.8rem;
-      color: #666;
-      margin-top: 0.5rem;
-      text-align: center;
-      font-style: italic;
-    }
+p{color:var(--txt2);margin-bottom:1rem}
+p:last-child{margin-bottom:0}
+p strong{color:var(--txt);font-weight:500}
 
-    /* SYNTHETIC GRID — 3 columns */
-    .synth-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.75rem;
-      margin-top: 1.25rem;
-    }
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.5rem}
+.tag{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  color:var(--txt3);
+  padding:.2rem .65rem;
+  border-radius:6px;
+  font-size:.73rem;
+  font-family:'DM Mono',monospace;
+  letter-spacing:.03em;
+}
 
-    .synth-grid .img-placeholder {
-      aspect-ratio: 1;
-      padding: 1rem;
-    }
+/* PIPELINE STEPS */
+.pipeline{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:0;
+  margin:2rem 0;
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+}
 
-    .synth-grid img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border: 1px solid #e1e4e8;
-      border-radius: 6px;
-      display: block;
-    }
+.pipe-step{
+  padding:1.25rem 1rem;
+  background:var(--bg3);
+  border-right:1px solid var(--border);
+  position:relative;
+  cursor:default;
+  transition:background .2s;
+}
 
-    /* TABLES */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.875rem;
-      margin-top: 1rem;
-    }
+.pipe-step:last-child{border-right:none}
+.pipe-step:hover{background:var(--bg4)}
 
-    th {
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      border-bottom: 2px solid #111;
-      font-weight: 600;
-      color: #111;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
+.pipe-step::after{
+  content:'→';
+  position:absolute;
+  right:-10px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--border2);
+  font-size:1.2rem;
+  z-index:1;
+}
+.pipe-step:last-child::after{display:none}
 
-    td {
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #e5e5e5;
-      color: #333;
-    }
+.pipe-num{
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;
+  color:var(--accent);
+  margin-bottom:.5rem;
+  letter-spacing:.1em;
+}
 
-    tr:last-child td { border-bottom: none; }
-    tr.avg td { font-weight: 600; color: #111; border-top: 1.5px solid #ccc; }
+.pipe-icon{
+  font-size:1.4rem;
+  margin-bottom:.4rem;
+}
 
-    /* BIBTEX */
-    .bibtex-wrap { position: relative; }
+.pipe-label{
+  font-size:.78rem;
+  font-weight:500;
+  color:var(--txt);
+  line-height:1.3;
+}
 
-    pre {
-      background: #f6f8fa;
-      border: 1px solid #e1e4e8;
-      border-radius: 6px;
-      padding: 1.25rem;
-      font-family: 'Courier New', monospace;
-      font-size: 0.8rem;
-      color: #333;
-      overflow-x: auto;
-      line-height: 1.65;
-      white-space: pre;
-    }
+.pipe-sub{
+  font-size:.7rem;
+  color:var(--txt3);
+  margin-top:.25rem;
+  font-family:'DM Mono',monospace;
+}
 
-    .copy-btn {
-      position: absolute;
-      top: 0.6rem;
-      right: 0.6rem;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      padding: 0.25rem 0.65rem;
-      font-size: 0.75rem;
-      cursor: pointer;
-      color: #555;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.15s;
-    }
-    .copy-btn:hover { border-color: #1a56db; color: #1a56db; }
+/* METRICS GRID */
+.metrics-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+  margin:2rem 0;
+}
 
-    /* FOOTER */
-    .footer {
-      margin-top: 3.5rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid #e5e5e5;
-      font-size: 0.8rem;
-      color: #888;
-      text-align: center;
-    }
+.metric-card{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:1.25rem 1rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .2s, transform .2s;
+}
 
-    @media (max-width: 600px) {
-      .page { padding: 2rem 1rem 4rem; }
-      .synth-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-  </style>
+.metric-card::before{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;
+  transition:opacity .2s;
+}
+
+.metric-card:hover{
+  border-color:var(--border2);
+  transform:translateY(-2px);
+}
+.metric-card:hover::before{opacity:1}
+
+.metric-label{
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--txt3);
+  margin-bottom:.5rem;
+}
+
+.metric-value{
+  font-family:'DM Serif Display',serif;
+  font-size:2.2rem;
+  color:#fff;
+  line-height:1;
+  margin-bottom:.25rem;
+}
+
+.metric-value span{font-size:1rem;color:var(--accent2)}
+
+.metric-sub{
+  font-size:.72rem;
+  color:var(--txt3);
+}
+
+/* CLASS BARS */
+.class-results{margin:2rem 0}
+
+.class-row{
+  display:grid;
+  grid-template-columns:80px 1fr 60px;
+  align-items:center;
+  gap:1rem;
+  margin-bottom:1.2rem;
+}
+
+.class-name{
+  font-family:'DM Mono',monospace;
+  font-size:.78rem;
+  color:var(--txt2);
+  letter-spacing:.04em;
+}
+
+.bar-track{
+  background:var(--bg3);
+  border-radius:999px;
+  height:8px;
+  overflow:hidden;
+  position:relative;
+}
+
+.bar-fill{
+  height:100%;
+  border-radius:999px;
+  width:0;
+  transition:width 1.2s cubic-bezier(.22,1,.36,1);
+}
+
+.bar-fill.aluminum{background:linear-gradient(90deg,var(--blue),#8bb4f8)}
+.bar-fill.paper{background:linear-gradient(90deg,var(--amber),#f8d88b)}
+.bar-fill.plastic{background:linear-gradient(90deg,var(--accent2),var(--accent))}
+.bar-fill.avg{background:linear-gradient(90deg,var(--coral),#f89b7d)}
+
+.bar-val{
+  font-family:'DM Mono',monospace;
+  font-size:.78rem;
+  color:var(--txt);
+  text-align:right;
+}
+
+/* TABS for results */
+.tabs{
+  display:flex;
+  gap:.25rem;
+  margin-bottom:1.5rem;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:.3rem;
+}
+
+.tab{
+  flex:1;
+  padding:.45rem .75rem;
+  border-radius:8px;
+  font-size:.8rem;
+  font-weight:500;
+  color:var(--txt3);
+  cursor:pointer;
+  border:none;
+  background:transparent;
+  transition:all .2s;
+  font-family:'Outfit',sans-serif;
+  text-align:center;
+}
+
+.tab.active{
+  background:var(--bg4);
+  color:var(--txt);
+  border:1px solid var(--border2);
+}
+
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* COMPARISON TABLE */
+.comp-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.83rem;
+  margin-top:1rem;
+}
+
+.comp-table th{
+  padding:.65rem 1rem;
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--txt3);
+  text-align:left;
+  border-bottom:1px solid var(--border);
+  font-weight:400;
+}
+
+.comp-table td{
+  padding:.7rem 1rem;
+  border-bottom:1px solid var(--border);
+  color:var(--txt2);
+  vertical-align:middle;
+}
+
+.comp-table tr:last-child td{border-bottom:none}
+
+.comp-table tr.ours td{
+  color:var(--txt);
+  background:rgba(127,255,111,.04);
+}
+
+.comp-table tr.ours td:first-child{
+  color:var(--accent);
+  font-weight:500;
+}
+
+.badge{
+  display:inline-block;
+  padding:.1rem .45rem;
+  border-radius:4px;
+  font-family:'DM Mono',monospace;
+  font-size:.68rem;
+  letter-spacing:.04em;
+}
+
+.badge.yes{background:rgba(127,255,111,.1);color:var(--accent);border:1px solid rgba(127,255,111,.2)}
+.badge.no{background:rgba(246,123,91,.1);color:var(--coral);border:1px solid rgba(246,123,91,.2)}
+
+.ours-badge{
+  display:inline-block;
+  background:var(--accent3);
+  color:var(--accent);
+  font-size:.6rem;
+  font-family:'DM Mono',monospace;
+  padding:.1rem .35rem;
+  border-radius:4px;
+  border:1px solid var(--accent2);
+  letter-spacing:.04em;
+  margin-left:.4rem;
+}
+
+/* BIBTEX */
+.bibtex-wrap{position:relative;margin-top:1rem}
+
+pre{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:1.5rem;
+  font-family:'DM Mono',monospace;
+  font-size:.78rem;
+  color:var(--txt2);
+  overflow-x:auto;
+  line-height:1.8;
+}
+
+.copy-btn{
+  position:absolute;
+  top:.75rem;right:.75rem;
+  background:var(--bg4);
+  border:1px solid var(--border2);
+  border-radius:6px;
+  padding:.3rem .75rem;
+  font-size:.72rem;
+  cursor:pointer;
+  color:var(--txt3);
+  font-family:'DM Mono',monospace;
+  transition:all .15s;
+  letter-spacing:.03em;
+}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* SYNTHETIC SAMPLES GRID */
+.synth-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1rem;
+  margin:1.5rem 0;
+}
+
+.synth-placeholder{
+  aspect-ratio:1;
+  background:var(--bg3);
+  border:1px dashed var(--border2);
+  border-radius:var(--r);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:var(--txt3);
+  font-size:.72rem;
+  font-family:'DM Mono',monospace;
+  gap:.4rem;
+}
+
+.synth-label{
+  background:var(--bg4);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:.15rem .5rem;
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;
+  color:var(--txt3);
+  margin-top:.3rem;
+  letter-spacing:.04em;
+}
+
+/* CANVAS CHART */
+canvas{display:block;width:100%;height:auto}
+
+/* HIGHLIGHT CALLOUT */
+.callout{
+  display:flex;
+  gap:1rem;
+  align-items:flex-start;
+  background:var(--accent3);
+  border:1px solid rgba(127,255,111,.15);
+  border-radius:var(--r);
+  padding:1.1rem 1.25rem;
+  margin:1.5rem 0;
+}
+
+.callout-icon{
+  font-size:1.2rem;
+  flex-shrink:0;
+  margin-top:.1rem;
+}
+
+.callout-text{
+  font-size:.88rem;
+  color:rgba(200,255,190,.8);
+  line-height:1.6;
+}
+.callout-text strong{color:var(--accent);font-weight:500}
+
+/* FOOTER */
+.footer{
+  padding:3rem 0 0;
+  border-top:1px solid var(--border);
+  display:flex;
+  gap:2rem;
+  align-items:flex-start;
+  flex-wrap:wrap;
+}
+
+.footer-brand{
+  font-family:'DM Serif Display',serif;
+  font-size:1.3rem;
+  color:#fff;
+  margin-bottom:.3rem;
+}
+
+.footer-meta{
+  font-family:'DM Mono',monospace;
+  font-size:.7rem;
+  color:var(--txt3);
+  line-height:1.8;
+}
+
+.footer-meta a{color:var(--txt3)}
+.footer-meta a:hover{color:var(--accent)}
+
+/* SCROLL REVEAL */
+.reveal{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* SCROLL PROGRESS */
+.scroll-progress{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:2px;
+  background:var(--border);
+  z-index:100;
+}
+.scroll-progress-bar{
+  height:100%;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  width:0%;
+  transition:width .1s linear;
+}
+
+/* TOOLTIP */
+.has-tooltip{position:relative;cursor:default}
+.tooltip{
+  position:absolute;
+  bottom:calc(100% + 8px);
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--bg4);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  padding:.4rem .75rem;
+  font-size:.72rem;
+  color:var(--txt);
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s;
+  font-family:'DM Mono',monospace;
+  z-index:50;
+}
+.has-tooltip:hover .tooltip{opacity:1}
+
+/* NAV */
+.nav{
+  position:fixed;
+  top:1rem;right:1.5rem;
+  z-index:50;
+  display:flex;
+  flex-direction:column;
+  gap:.4rem;
+  align-items:flex-end;
+}
+
+.nav-dot{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  cursor:pointer;
+  opacity:.4;
+  transition:opacity .2s;
+}
+.nav-dot:hover,.nav-dot.active{opacity:1}
+.nav-dot-label{
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;
+  letter-spacing:.05em;
+  color:var(--txt);
+  opacity:0;
+  transform:translateX(4px);
+  transition:all .2s;
+}
+.nav-dot:hover .nav-dot-label,.nav-dot.active .nav-dot-label{
+  opacity:1;transform:translateX(0);
+}
+.nav-dot-circle{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--border2);
+  transition:background .2s, transform .2s;
+  flex-shrink:0;
+}
+.nav-dot.active .nav-dot-circle{
+  background:var(--accent);
+  transform:scale(1.4);
+}
+
+/* RADAR */
+.radar-wrap{
+  max-width:300px;
+  margin:1.5rem auto;
+}
+
+@media(max-width:640px){
+  .pipeline{grid-template-columns:1fr}
+  .pipe-step::after{display:none}
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  .synth-grid{grid-template-columns:repeat(2,1fr)}
+  .nav{display:none}
+  h1{font-size:2rem}
+}
+</style>
 </head>
 <body>
+
+<div class="scroll-progress"><div class="scroll-progress-bar" id="spbar"></div></div>
+
+<!-- SIDE NAV -->
+<nav class="nav" aria-label="Page sections">
+  <div class="nav-dot active" data-target="hero">
+    <span class="nav-dot-label">Overview</span>
+    <div class="nav-dot-circle"></div>
+  </div>
+  <div class="nav-dot" data-target="methodology">
+    <span class="nav-dot-label">Method</span>
+    <div class="nav-dot-circle"></div>
+  </div>
+  <div class="nav-dot" data-target="results">
+    <span class="nav-dot-label">Results</span>
+    <div class="nav-dot-circle"></div>
+  </div>
+  <div class="nav-dot" data-target="comparison">
+    <span class="nav-dot-label">Comparison</span>
+    <div class="nav-dot-circle"></div>
+  </div>
+  <div class="nav-dot" data-target="bibtex">
+    <span class="nav-dot-label">Cite</span>
+    <div class="nav-dot-circle"></div>
+  </div>
+</nav>
+
 <div class="page">
 
-  <!-- HEADER -->
-  <p class="venue">ICCIT 2025 &nbsp;·&nbsp; 28th International Conference on Computer and Information Technology &nbsp;·&nbsp; Cox's Bazar, Bangladesh &nbsp;·&nbsp; December 19–21, 2025</p>
+  <!-- HERO -->
+  <header class="hero reveal" id="hero">
+    <div class="venue-badge">ICCIT 2025 &nbsp;·&nbsp; Cox's Bazar, Bangladesh &nbsp;·&nbsp; Dec 19–21</div>
 
-  <h1>EcoDetect: Lightweight Real-Time Recyclable Waste Detection Using YOLOv11n Trained on LLM-Guided Synthetic Data</h1>
+    <h1>EcoDetect: Lightweight Real-Time Recyclable Waste Detection Using <em>YOLOv11n</em> Trained on LLM-Guided Synthetic Data</h1>
 
-  <div class="authors">
-    <span>Ahsan Farabi</span>·
-    <span>Md. Abdul Ahad Minhaz</span>·
-    <span>Israt Khandaker</span>·
-    <span>Ibrahim Khalil Shanto</span>·
-    <span>Md. Tanvir Raihan</span>
-  </div>
+    <div class="authors-row">
+      <span class="author-chip">Ahsan Farabi</span>
+      <span class="author-chip">Md. Abdul Ahad Minhaz</span>
+      <span class="author-chip">Israt Khandaker</span>
+      <span class="author-chip">Ibrahim Khalil Shanto</span>
+      <span class="author-chip">Md. Tanvir Raihan</span>
+    </div>
+    <p class="affil">Department of Computer Science and Engineering — United International University, Dhaka, Bangladesh</p>
 
-  <p class="affil">Department of Computer Science and Engineering, United International University, Dhaka, Bangladesh</p>
-
-  <!-- LINKS -->
-  <div class="links">
-    <a class="link-btn" href="https://doi.org/10.1109/ICCIT68739.2025.11491266" target="_blank">Paper</a>
-    <a class="link-btn" href="https://github.com/TheAhsanFarabi/EcoDetect" target="_blank">Code</a>
-    <a class="link-btn" href="https://www.kaggle.com/datasets/ahsan71/ecodetect-recyclable-waste-detection-dataset" target="_blank">Dataset</a>
-    <a class="link-btn" href="https://youtu.be/hPAnPDIOQHE?si=YyOwUke-Ecry5rx7" target="_blank">Presentation</a>
-  </div>
-
-  <hr>
+    <div class="links">
+      <a class="link-btn" href="https://doi.org/10.1109/ICCIT68739.2025.11491266" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+        Paper
+      </a>
+      <a class="link-btn" href="https://github.com/TheAhsanFarabi/EcoDetect" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+        Code
+      </a>
+      <a class="link-btn" href="https://www.kaggle.com/datasets/ahsan71/ecodetect-recyclable-waste-detection-dataset" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        Dataset
+      </a>
+      <a class="link-btn" href="https://youtu.be/hPAnPDIOQHE?si=YyOwUke-Ecry5rx7" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+        Talk
+      </a>
+      <a class="link-btn" href="https://doi.org/10.1109/ICCIT68739.2025.11491266" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        DOI
+      </a>
+    </div>
+  </header>
 
   <!-- ABSTRACT -->
-  <h2>Abstract</h2>
-  <p>
-    The improper disposal of recyclable waste creates numerous issues for urban waste management systems and significantly harms the environment. Manual sorting is often ineffective, inconsistent, and economically unfeasible, especially in areas with limited resources.
-  </p>
-  <p>
-    In this study, we present <strong>EcoDetect</strong>, a lightweight, real-time recyclable waste detection system optimized for edge deployment. To address the shortage of labeled training data, the proposed approach combines prompt-based synthetic data generation with Roboflow-assisted annotation and augmentation. A YOLOv11n-based object detection model is trained to detect three waste categories: plastic, paper, and aluminum.
-  </p>
-  <p>
-    Evaluation on a completely unseen real-world test set demonstrates superior generalization from synthetic to real domains, achieving a precision of 78.9%, recall of 76.5%, and mAP@0.5 of 81.1%. By completely eliminating the need for manual data collection while maintaining high accuracy, EcoDetect delivers a scalable, low-latency solution optimized for real-world deployment and efficient edge operation.
-  </p>
+  <section class="reveal" id="abstract">
+    <div class="section-label">Abstract</div>
+    <h2>Turning text into training data</h2>
 
-  <div class="tags">
-    <span class="tag">YOLOv11n</span>
-    <span class="tag">Recyclable Waste Detection</span>
-    <span class="tag">Synthetic Data</span>
-    <span class="tag">LLM Prompting</span>
-    <span class="tag">Edge Deployment</span>
-    <span class="tag">Object Detection</span>
-    <span class="tag">Smart Waste Management</span>
-    <span class="tag">Computer Vision</span>
-  </div>
+    <p>Improper disposal of recyclable waste creates significant challenges for urban waste management and the environment. Manual sorting is inconsistent and economically unfeasible, especially in resource-limited areas.</p>
 
-  <hr>
+    <p>We present <strong>EcoDetect</strong> — a lightweight, real-time recyclable waste detection system designed for edge deployment. Rather than collecting labeled real-world data, we leverage LLM-guided prompt engineering to generate synthetic training images at scale, covering three waste classes: plastic, paper, and aluminum.</p>
+
+    <p>Tested on a completely unseen real-world holdout set, EcoDetect achieves <strong>78.9% precision</strong>, <strong>76.5% recall</strong>, and <strong>81.1% mAP@0.5</strong> — with only 2.59M parameters and 6.4 GFLOPs.</p>
+
+    <div class="tags">
+      <span class="tag">YOLOv11n</span>
+      <span class="tag">Synthetic Data</span>
+      <span class="tag">LLM Prompting</span>
+      <span class="tag">Edge Deployment</span>
+      <span class="tag">Object Detection</span>
+      <span class="tag">Waste Management</span>
+      <span class="tag">Synthetic-to-Real Transfer</span>
+      <span class="tag">Computer Vision</span>
+    </div>
+  </section>
 
   <!-- METHODOLOGY -->
-  <h2>Methodology</h2>
-  <p>
-    EcoDetect adopts a synthetic-first strategy. Large language models generate diverse, structured prompts that feed text-to-image models, producing realistic training images without any manual data collection. These are annotated and augmented via Roboflow, then used to fine-tune a pretrained YOLOv11n model. The final model is evaluated exclusively on held-out real-world images.
-  </p>
+  <section class="reveal" id="methodology">
+    <div class="section-label">Methodology</div>
+    <h2>A synthetic-first pipeline</h2>
+    <p>EcoDetect eliminates manual data collection entirely. Large language models generate structured, scene-diverse prompts. These feed text-to-image models to produce realistic training images, which are then annotated and augmented via Roboflow before fine-tuning YOLOv11n.</p>
 
-  <!-- TODO: Replace with your pipeline figure (e.g. static/images/pipeline.png) -->
-  <div class="img-block">
-    <img src="static/images/pipeline.png"
-         alt="EcoDetect pipeline overview"
-         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-    <div class="img-placeholder" style="display:none;">
-      Add pipeline figure here<br>
-      <code style="font-size:0.75rem;margin-top:0.4rem;">static/images/pipeline.png</code>
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="pipe-num">01</div>
+        <div class="pipe-icon">🧠</div>
+        <div class="pipe-label">LLM Prompt Generation</div>
+        <div class="pipe-sub">Diverse scenes, lighting, clutter</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">02</div>
+        <div class="pipe-icon">🖼️</div>
+        <div class="pipe-label">Image Synthesis</div>
+        <div class="pipe-sub">415 high-res images</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">03</div>
+        <div class="pipe-icon">🏷️</div>
+        <div class="pipe-label">Annotation & Augmentation</div>
+        <div class="pipe-sub">Roboflow pipeline</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">04</div>
+        <div class="pipe-icon">⚡</div>
+        <div class="pipe-label">YOLOv11n Fine-tuning</div>
+        <div class="pipe-sub">2.59M params · 6.4 GFLOPs</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">05</div>
+        <div class="pipe-icon">🌍</div>
+        <div class="pipe-label">Real-world Evaluation</div>
+        <div class="pipe-sub">75 held-out images</div>
+      </div>
     </div>
-    <p class="img-caption">Fig. 1. Overview of the EcoDetect pipeline: LLM prompt generation → synthetic image generation → annotation &amp; augmentation → YOLOv11n fine-tuning → real-world evaluation.</p>
-  </div>
 
-  <hr>
+    <div class="section-label" style="margin-top:2.5rem;margin-bottom:1rem">Synthetic Samples</div>
+    <p>Prompts described varied settings — parks, offices, sidewalks — with diverse object positions, backgrounds, and lighting to maximize scene variety across the three waste classes.</p>
 
-  <!-- SYNTHETIC SAMPLES -->
-  <h2>Synthetic Data Samples</h2>
-  <p>
-    A total of 415 high-resolution synthetic images were generated using structured LLM prompts. Prompts described diverse settings (parks, offices, sidewalks), lighting conditions, object positions, and background clutter to ensure class coverage and scene variety.
-  </p>
-
-  <!-- TODO: Replace src values with your actual synthetic sample images -->
-  <div class="synth-grid">
-    <div>
-      <img src="static/images/synth1.png" alt="Synthetic sample 1"
-           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-      <div class="img-placeholder" style="display:none;">synth1.png</div>
+    <div class="synth-grid">
+      <div class="synth-placeholder">
+        <div style="font-size:2rem">🥤</div>
+        <code>synth_plastic_01.png</code>
+        <span class="synth-label">PLASTIC</span>
+      </div>
+      <div class="synth-placeholder">
+        <div style="font-size:2rem">📄</div>
+        <code>synth_paper_01.png</code>
+        <span class="synth-label">PAPER</span>
+      </div>
+      <div class="synth-placeholder">
+        <div style="font-size:2rem">🥫</div>
+        <code>synth_aluminum_01.png</code>
+        <span class="synth-label">ALUMINUM</span>
+      </div>
     </div>
-    <div>
-      <img src="static/images/synth2.png" alt="Synthetic sample 2"
-           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-      <div class="img-placeholder" style="display:none;">synth2.png</div>
-    </div>
-    <div>
-      <img src="static/images/synth3.png" alt="Synthetic sample 3"
-           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-      <div class="img-placeholder" style="display:none;">synth3.png</div>
-    </div>
-  </div>
-  <p class="img-caption">Fig. 2. Example synthetic images generated using LLM-guided prompt engineering, showing plastic, paper, and aluminum waste in varied real-world scenes.</p>
-
-  <hr>
+    <p style="font-size:.75rem;color:var(--txt3);font-family:'DM Mono',monospace;text-align:center">Fig. 2 — Replace placeholders with actual images at static/images/synth*.png</p>
+  </section>
 
   <!-- RESULTS -->
-  <h2>Results</h2>
-  <p>Evaluated on 75 real-world images (354 annotated instances) held out entirely from training. Three independent seeds confirm robustness: averaged mAP@0.5 of <strong>0.799 ± 0.008</strong>.</p>
+  <section class="reveal" id="results">
+    <div class="section-label">Results</div>
+    <h2>Strong synthetic-to-real transfer</h2>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Class</th>
-        <th>Precision</th>
-        <th>Recall</th>
-        <th>mAP@0.5</th>
-        <th>mAP@0.5:0.95</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Aluminum</td><td>0.799</td><td>0.824</td><td>0.829</td><td>0.622</td></tr>
-      <tr><td>Paper</td><td>0.782</td><td>0.629</td><td>0.734</td><td>0.573</td></tr>
-      <tr><td>Plastic</td><td>0.785</td><td>0.840</td><td>0.871</td><td>0.677</td></tr>
-      <tr class="avg"><td>Average</td><td>0.789</td><td>0.765</td><td>0.811</td><td>0.624</td></tr>
-    </tbody>
-  </table>
-
-  <!-- TODO: Replace with your inference result image (e.g. Fig. 5 from the paper) -->
-  <div class="img-block" style="margin-top:1.5rem;">
-    <img src="static/images/inference.png"
-         alt="Inference result on real-world image"
-         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-    <div class="img-placeholder" style="display:none;">
-      Add inference result image here<br>
-      <code style="font-size:0.75rem;margin-top:0.4rem;">static/images/inference.png</code>
+    <div class="callout">
+      <div class="callout-icon">📊</div>
+      <div class="callout-text">
+        Evaluated on <strong>75 real-world images</strong> (354 annotated instances) held out entirely from training.
+        Three independent seeds confirm robustness: averaged <strong>mAP@0.5 = 0.799 ± 0.008</strong>.
+      </div>
     </div>
-    <p class="img-caption">Fig. 3. Inference on a held-out real-world image. Bounding boxes with class labels and confidence scores are shown for plastic, aluminum, and paper.</p>
-  </div>
 
-  <hr>
+    <div class="metrics-grid">
+      <div class="metric-card has-tooltip">
+        <div class="metric-label">Precision</div>
+        <div class="metric-value" id="m-precision">0<span>%</span></div>
+        <div class="metric-sub">avg all classes</div>
+        <div class="tooltip">True positives / (TP + FP)</div>
+      </div>
+      <div class="metric-card has-tooltip">
+        <div class="metric-label">Recall</div>
+        <div class="metric-value" id="m-recall">0<span>%</span></div>
+        <div class="metric-sub">avg all classes</div>
+        <div class="tooltip">True positives / (TP + FN)</div>
+      </div>
+      <div class="metric-card has-tooltip">
+        <div class="metric-label">mAP@0.5</div>
+        <div class="metric-value" id="m-map">0<span>%</span></div>
+        <div class="metric-sub">±0.008 over 3 seeds</div>
+        <div class="tooltip">Mean Average Precision at IoU 0.5</div>
+      </div>
+      <div class="metric-card has-tooltip">
+        <div class="metric-label">mAP@0.5:0.95</div>
+        <div class="metric-value" id="m-map2">0<span>%</span></div>
+        <div class="metric-sub">COCO-style metric</div>
+        <div class="tooltip">Averaged over IoU thresholds 0.5–0.95</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('precision')">Precision</button>
+      <button class="tab" onclick="switchTab('recall')">Recall</button>
+      <button class="tab" onclick="switchTab('map')">mAP@0.5</button>
+      <button class="tab" onclick="switchTab('map2')">mAP@0.5:0.95</button>
+    </div>
+
+    <div class="class-results" id="bar-container">
+      <div class="class-row">
+        <span class="class-name">Aluminum</span>
+        <div class="bar-track"><div class="bar-fill aluminum" id="bar-aluminum" style="width:0"></div></div>
+        <span class="bar-val" id="val-aluminum">—</span>
+      </div>
+      <div class="class-row">
+        <span class="class-name">Paper</span>
+        <div class="bar-track"><div class="bar-fill paper" id="bar-paper" style="width:0"></div></div>
+        <span class="bar-val" id="val-paper">—</span>
+      </div>
+      <div class="class-row">
+        <span class="class-name">Plastic</span>
+        <div class="bar-track"><div class="bar-fill plastic" id="bar-plastic" style="width:0"></div></div>
+        <span class="bar-val" id="val-plastic">—</span>
+      </div>
+      <div class="class-row" style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border)">
+        <span class="class-name" style="color:var(--txt)">Average</span>
+        <div class="bar-track"><div class="bar-fill avg" id="bar-avg" style="width:0"></div></div>
+        <span class="bar-val" id="val-avg">—</span>
+      </div>
+    </div>
+  </section>
 
   <!-- COMPARISON -->
-  <h2>Comparison</h2>
-  <p>EcoDetect is the only model combining synthetic-only training with edge-ready architecture at competitive accuracy, while using 90% fewer computations than YOLOv8-CBAM.</p>
+  <section class="reveal" id="comparison">
+    <div class="section-label">Comparison</div>
+    <h2>Competitive accuracy, fraction of the cost</h2>
+    <p>EcoDetect is the only model that combines <strong>synthetic-only training</strong> with an <strong>edge-ready architecture</strong> at competitive accuracy — using 90% fewer parameters than YOLOv8-CBAM.</p>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Model</th>
-        <th>Params (M)</th>
-        <th>GFLOPs</th>
-        <th>mAP@0.5</th>
-        <th>Synth. Only</th>
-        <th>Edge Ready</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>YOLOv8-CBAM</td><td>25.3</td><td>15.8</td><td>0.78</td><td>✗</td><td>✗</td></tr>
-      <tr><td>YOLO EC</td><td>12.1</td><td>8.6</td><td>0.74</td><td>✗</td><td>✓</td></tr>
-      <tr><td>MRS-YOLO</td><td>10.6</td><td>6.9</td><td>0.77</td><td>✗</td><td>✓</td></tr>
-      <tr><td>YOLOv11x</td><td>68.2</td><td>126.7</td><td>0.82</td><td>✓</td><td>✓</td></tr>
-      <tr class="avg"><td>EcoDetect (ours)</td><td>2.59</td><td>6.4</td><td>0.81</td><td>✓</td><td>✓</td></tr>
-    </tbody>
-  </table>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Params</th>
+          <th>GFLOPs</th>
+          <th>mAP@0.5</th>
+          <th>Synth. only</th>
+          <th>Edge ready</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>YOLOv8-CBAM</td>
+          <td>25.3M</td>
+          <td>15.8</td>
+          <td>0.78</td>
+          <td><span class="badge no">✗ No</span></td>
+          <td><span class="badge no">✗ No</span></td>
+        </tr>
+        <tr>
+          <td>YOLO EC</td>
+          <td>12.1M</td>
+          <td>8.6</td>
+          <td>0.74</td>
+          <td><span class="badge no">✗ No</span></td>
+          <td><span class="badge yes">✓ Yes</span></td>
+        </tr>
+        <tr>
+          <td>MRS-YOLO</td>
+          <td>10.6M</td>
+          <td>6.9</td>
+          <td>0.77</td>
+          <td><span class="badge no">✗ No</span></td>
+          <td><span class="badge yes">✓ Yes</span></td>
+        </tr>
+        <tr>
+          <td>YOLOv11x</td>
+          <td>68.2M</td>
+          <td>126.7</td>
+          <td>0.82</td>
+          <td><span class="badge yes">✓ Yes</span></td>
+          <td><span class="badge yes">✓ Yes</span></td>
+        </tr>
+        <tr class="ours">
+          <td>EcoDetect <span class="ours-badge">OURS</span></td>
+          <td style="color:var(--accent)">2.59M</td>
+          <td style="color:var(--accent)">6.4</td>
+          <td style="color:var(--accent)">0.81</td>
+          <td><span class="badge yes">✓ Yes</span></td>
+          <td><span class="badge yes">✓ Yes</span></td>
+        </tr>
+      </tbody>
+    </table>
 
-  <hr>
+    <div style="margin-top:2rem">
+      <div class="section-label" style="margin-bottom:1rem">Model size vs mAP@0.5</div>
+      <canvas id="scatterChart" style="max-height:280px"></canvas>
+    </div>
+  </section>
 
   <!-- BIBTEX -->
-  <h2>BibTeX</h2>
-  <div class="bibtex-wrap">
-    <pre id="bibtex">@INPROCEEDINGS{11491266,
+  <section class="reveal" id="bibtex">
+    <div class="section-label">Citation</div>
+    <h2>BibTeX</h2>
+    <div class="bibtex-wrap">
+      <pre id="bibtex-pre">@INPROCEEDINGS{11491266,
   author    = {Farabi, Ahsan and Minhaz, Md. Abdul Ahad and
                Khandaker, Israt and Shanto, Ibrahim Khalil and
                Raihan, Md. Tanvir},
@@ -451,33 +1021,199 @@
   pages     = {66--71},
   doi       = {10.1109/ICCIT68739.2025.11491266}
 }</pre>
-    <button class="copy-btn" onclick="copyBib()">Copy</button>
-  </div>
+      <button class="copy-btn" id="copy-btn" onclick="copyBib()">Copy</button>
+    </div>
+  </section>
 
   <!-- FOOTER -->
-  <div class="footer">
-    <p>
-      Code &amp; dataset: <a href="https://github.com/TheAhsanFarabi/EcoDetect" target="_blank">github.com/TheAhsanFarabi/EcoDetect</a>
-      &nbsp;·&nbsp;
-      DOI: <a href="https://doi.org/10.1109/ICCIT68739.2025.11491266" target="_blank">10.1109/ICCIT68739.2025.11491266</a>
-    </p>
-    <p style="margin-top:0.5rem;">
-      Built with the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.
-      Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
-    </p>
-  </div>
+  <footer class="footer reveal">
+    <div>
+      <div class="footer-brand">EcoDetect</div>
+      <div class="footer-meta">
+        ICCIT 2025 &nbsp;·&nbsp; Pages 66–71<br>
+        <a href="https://doi.org/10.1109/ICCIT68739.2025.11491266" target="_blank">doi:10.1109/ICCIT68739.2025.11491266</a>
+      </div>
+    </div>
+    <div style="flex:1"></div>
+    <div class="footer-meta" style="text-align:right">
+      <a href="https://github.com/TheAhsanFarabi/EcoDetect" target="_blank">github.com/TheAhsanFarabi/EcoDetect</a><br>
+      <a href="https://www.kaggle.com/datasets/ahsan71/ecodetect-recyclable-waste-detection-dataset" target="_blank">Kaggle Dataset</a><br>
+      Built on <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Page Template</a> · CC BY-SA 4.0
+    </div>
+  </footer>
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-  function copyBib() {
-    const text = document.getElementById('bibtex').innerText;
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.querySelector('.copy-btn');
-      btn.textContent = 'Copied!';
-      setTimeout(() => btn.textContent = 'Copy', 2000);
-    });
-  }
+const data = {
+  precision:  {aluminum:.799, paper:.782, plastic:.785, avg:.789},
+  recall:     {aluminum:.824, paper:.629, plastic:.840, avg:.765},
+  map:        {aluminum:.829, paper:.734, plastic:.871, avg:.811},
+  map2:       {aluminum:.622, paper:.573, plastic:.677, avg:.624}
+};
+
+let currentTab = 'precision';
+let barsAnimated = false;
+
+function pct(v){return (v*100).toFixed(1)}
+
+function setMetrics(){
+  animateCount('m-precision', 78.9);
+  animateCount('m-recall', 76.5);
+  animateCount('m-map', 81.1);
+  animateCount('m-map2', 62.4);
+}
+
+function animateCount(id, target){
+  const el = document.getElementById(id);
+  const unit = el.querySelector('span');
+  let start = 0;
+  const step = target / 40;
+  const interval = setInterval(()=>{
+    start = Math.min(start + step, target);
+    el.childNodes[0].nodeValue = start.toFixed(1);
+    if(start >= target) clearInterval(interval);
+  }, 30);
+}
+
+function updateBars(tab){
+  const d = data[tab];
+  ['aluminum','paper','plastic','avg'].forEach(cls => {
+    const val = d[cls];
+    document.getElementById('bar-'+cls).style.width = (val*100)+'%';
+    document.getElementById('val-'+cls).textContent = pct(val)+'%';
+  });
+}
+
+function switchTab(tab){
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  updateBars(tab);
+}
+
+function copyBib(){
+  const text = document.getElementById('bibtex-pre').innerText;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied ✓';
+    btn.style.color = 'var(--accent)';
+    btn.style.borderColor = 'var(--accent)';
+    setTimeout(()=>{
+      btn.textContent = 'Copy';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 2000);
+  });
+}
+
+function buildScatterChart(){
+  const models = [
+    {label:'YOLOv8-CBAM', x:25.3, y:.78, r:8, color:'rgba(246,123,91,.6)'},
+    {label:'YOLO EC',      x:12.1, y:.74, r:6, color:'rgba(91,156,246,.6)'},
+    {label:'MRS-YOLO',     x:10.6, y:.77, r:6, color:'rgba(91,156,246,.6)'},
+    {label:'YOLOv11x',     x:68.2, y:.82, r:9, color:'rgba(246,196,91,.6)'},
+    {label:'EcoDetect',    x:2.59, y:.811, r:10, color:'rgba(127,255,111,.8)'},
+  ];
+
+  const ctx = document.getElementById('scatterChart').getContext('2d');
+  new Chart(ctx, {
+    type:'bubble',
+    data:{
+      datasets: models.map(m=>({
+        label:m.label,
+        data:[{x:m.x, y:m.y, r:m.r}],
+        backgroundColor:m.color,
+        borderColor:m.color.replace(',.6',',.9').replace(',.8',',.9'),
+        borderWidth:1.5,
+      }))
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{
+          labels:{
+            color:'#9898a8',
+            font:{family:"'DM Mono', monospace", size:11},
+            boxWidth:10,
+            padding:14,
+          }
+        },
+        tooltip:{
+          backgroundColor:'#18181c',
+          borderColor:'#3a3a45',
+          borderWidth:1,
+          titleColor:'#e8e8ee',
+          bodyColor:'#9898a8',
+          titleFont:{family:"'DM Mono', monospace", size:11},
+          bodyFont:{family:"'DM Mono', monospace", size:11},
+          callbacks:{
+            label:(ctx)=>{
+              const d = ctx.raw;
+              return ` ${ctx.dataset.label}: ${d.x}M params · mAP ${d.y}`;
+            }
+          }
+        }
+      },
+      scales:{
+        x:{
+          title:{display:true, text:'Parameters (M)', color:'#5a5a6a', font:{family:"'DM Mono', monospace", size:10}},
+          grid:{color:'rgba(42,42,50,.6)'},
+          ticks:{color:'#5a5a6a', font:{family:"'DM Mono', monospace", size:10}},
+        },
+        y:{
+          title:{display:true, text:'mAP@0.5', color:'#5a5a6a', font:{family:"'DM Mono', monospace", size:10}},
+          grid:{color:'rgba(42,42,50,.6)'},
+          ticks:{color:'#5a5a6a', font:{family:"'DM Mono', monospace", size:10}},
+          min:.70, max:.85,
+        }
+      }
+    }
+  });
+}
+
+// Scroll
+window.addEventListener('scroll',()=>{
+  const el = document.documentElement;
+  const pct = el.scrollTop / (el.scrollHeight - el.clientHeight) * 100;
+  document.getElementById('spbar').style.width = pct+'%';
+
+  const sections = ['hero','methodology','results','comparison','bibtex'];
+  sections.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    const rect = el.getBoundingClientRect();
+    const dot = document.querySelector(`.nav-dot[data-target="${id}"]`);
+    if(dot) dot.classList.toggle('active', rect.top <= 200 && rect.bottom > 100);
+  });
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      if(entry.target.id==='results' && !barsAnimated){
+        barsAnimated = true;
+        setMetrics();
+        setTimeout(()=>updateBars(currentTab), 300);
+      }
+    }
+  });
+},{threshold:.1});
+
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// Nav click
+document.querySelectorAll('.nav-dot').forEach(dot=>{
+  dot.addEventListener('click',()=>{
+    const target = document.getElementById(dot.dataset.target);
+    if(target) target.scrollIntoView({behavior:'smooth'});
+  });
+});
+
+window.addEventListener('load', buildScatterChart);
 </script>
 </body>
 </html>
