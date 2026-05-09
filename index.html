@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EcoDetect — ICCIT 2025</title>
+
+  <meta name="description" content="EcoDetect: Lightweight Real-Time Recyclable Waste Detection Using YOLOv11n Trained on LLM-Guided Synthetic Data. ICCIT 2025.">
+  <meta name="citation_title" content="EcoDetect: Lightweight Real-Time Recyclable Waste Detection Using YOLOv11n Trained on LLM-Guided Synthetic Data">
+  <meta name="citation_author" content="Farabi, Ahsan">
+  <meta name="citation_author" content="Minhaz, Md. Abdul Ahad">
+  <meta name="citation_author" content="Khandaker, Israt">
+  <meta name="citation_author" content="Shanto, Ibrahim Khalil">
+  <meta name="citation_author" content="Raihan, Md. Tanvir">
+  <meta name="citation_publication_date" content="2025">
+  <meta name="citation_conference_title" content="2025 28th International Conference on Computer and Information Technology (ICCIT)">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    a { color: #1a56db; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* HEADER */
+    .venue {
+      font-size: 0.85rem;
+      color: #555;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: 'Source Serif 4', serif;
+      font-size: clamp(1.55rem, 3.5vw, 2.1rem);
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.25;
+      color: #111;
+      margin-bottom: 1.5rem;
+    }
+
+    .authors {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #333;
+      margin-bottom: 0.4rem;
+    }
+
+    .authors span { margin: 0 0.25rem; }
+
+    .affil {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    /* LINKS */
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.55rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.4rem 1rem;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #222;
+      background: #fafafa;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+    }
+
+    .link-btn:hover {
+      border-color: #1a56db;
+      background: #f0f5ff;
+      color: #1a56db;
+      text-decoration: none;
+    }
+
+    /* DIVIDER */
+    hr {
+      border: none;
+      border-top: 1px solid #e5e5e5;
+      margin: 2rem 0;
+    }
+
+    /* SECTIONS */
+    h2 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 0.75rem;
+    }
+
+    p { color: #333; margin-bottom: 0.75rem; }
+    p:last-child { margin-bottom: 0; }
+
+    /* TAGS */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      background: #f0f4f8;
+      border: 1px solid #d9e2ec;
+      color: #486581;
+      padding: 0.15rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    /* IMAGE BLOCKS */
+    .img-block {
+      margin-top: 1.25rem;
+    }
+
+    .img-block img {
+      width: 100%;
+      border: 1px solid #e1e4e8;
+      border-radius: 6px;
+      display: block;
+    }
+
+    /* placeholder shown when no image is provided */
+    .img-placeholder {
+      width: 100%;
+      border: 1.5px dashed #ccc;
+      border-radius: 6px;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-size: 0.82rem;
+      text-align: center;
+      padding: 2.5rem 1rem;
+      font-style: italic;
+    }
+
+    .img-caption {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 0.5rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* SYNTHETIC GRID — 3 columns */
+    .synth-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .synth-grid .img-placeholder {
+      aspect-ratio: 1;
+      padding: 1rem;
+    }
+
+    .synth-grid img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border: 1px solid #e1e4e8;
+      border-radius: 6px;
+      display: block;
+    }
+
+    /* TABLES */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      margin-top: 1rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 2px solid #111;
+      font-weight: 600;
+      color: #111;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e5e5e5;
+      color: #333;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr.avg td { font-weight: 600; color: #111; border-top: 1.5px solid #ccc; }
+
+    /* BIBTEX */
+    .bibtex-wrap { position: relative; }
+
+    pre {
+      background: #f6f8fa;
+      border: 1px solid #e1e4e8;
+      border-radius: 6px;
+      padding: 1.25rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      color: #333;
+      overflow-x: auto;
+      line-height: 1.65;
+      white-space: pre;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.6rem;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      color: #555;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { border-color: #1a56db; color: #1a56db; }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 3.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #e5e5e5;
+      font-size: 0.8rem;
+      color: #888;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .page { padding: 2rem 1rem 4rem; }
+      .synth-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <p class="venue">ICCIT 2025 &nbsp;·&nbsp; 28th International Conference on Computer and Information Technology &nbsp;·&nbsp; Cox's Bazar, Bangladesh &nbsp;·&nbsp; December 19–21, 2025</p>
+
+  <h1>EcoDetect: Lightweight Real-Time Recyclable Waste Detection Using YOLOv11n Trained on LLM-Guided Synthetic Data</h1>
+
+  <div class="authors">
+    <span>Ahsan Farabi</span>·
+    <span>Md. Abdul Ahad Minhaz</span>·
+    <span>Israt Khandaker</span>·
+    <span>Ibrahim Khalil Shanto</span>·
+    <span>Md. Tanvir Raihan</span>
+  </div>
+
+  <p class="affil">Department of Computer Science and Engineering, United International University, Dhaka, Bangladesh</p>
+
+  <!-- LINKS -->
+  <div class="links">
+    <a class="link-btn" href="https://doi.org/10.1109/ICCIT68739.2025.11491266" target="_blank">Paper</a>
+    <a class="link-btn" href="https://github.com/TheAhsanFarabi/EcoDetect" target="_blank">Code</a>
+    <a class="link-btn" href="https://github.com/TheAhsanFarabi/EcoDetect" target="_blank">Dataset</a>
+    <a class="link-btn" href="#" target="_blank">Presentation</a>
+  </div>
+
+  <hr>
+
+  <!-- ABSTRACT -->
+  <h2>Abstract</h2>
+  <p>
+    The improper disposal of recyclable waste creates numerous issues for urban waste management systems and significantly harms the environment. Manual sorting is often ineffective, inconsistent, and economically unfeasible, especially in areas with limited resources.
+  </p>
+  <p>
+    In this study, we present <strong>EcoDetect</strong>, a lightweight, real-time recyclable waste detection system optimized for edge deployment. To address the shortage of labeled training data, the proposed approach combines prompt-based synthetic data generation with Roboflow-assisted annotation and augmentation. A YOLOv11n-based object detection model is trained to detect three waste categories: plastic, paper, and aluminum.
+  </p>
+  <p>
+    Evaluation on a completely unseen real-world test set demonstrates superior generalization from synthetic to real domains, achieving a precision of 78.9%, recall of 76.5%, and mAP@0.5 of 81.1%. By completely eliminating the need for manual data collection while maintaining high accuracy, EcoDetect delivers a scalable, low-latency solution optimized for real-world deployment and efficient edge operation.
+  </p>
+
+  <div class="tags">
+    <span class="tag">YOLOv11n</span>
+    <span class="tag">Recyclable Waste Detection</span>
+    <span class="tag">Synthetic Data</span>
+    <span class="tag">LLM Prompting</span>
+    <span class="tag">Edge Deployment</span>
+    <span class="tag">Object Detection</span>
+    <span class="tag">Smart Waste Management</span>
+    <span class="tag">Computer Vision</span>
+  </div>
+
+  <hr>
+
+  <!-- METHODOLOGY -->
+  <h2>Methodology</h2>
+  <p>
+    EcoDetect adopts a synthetic-first strategy. Large language models generate diverse, structured prompts that feed text-to-image models, producing realistic training images without any manual data collection. These are annotated and augmented via Roboflow, then used to fine-tune a pretrained YOLOv11n model. The final model is evaluated exclusively on held-out real-world images.
+  </p>
+
+  <!-- TODO: Replace with your pipeline figure (e.g. static/images/pipeline.png) -->
+  <div class="img-block">
+    <img src="static/images/pipeline.png"
+         alt="EcoDetect pipeline overview"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="img-placeholder" style="display:none;">
+      Add pipeline figure here<br>
+      <code style="font-size:0.75rem;margin-top:0.4rem;">static/images/pipeline.png</code>
+    </div>
+    <p class="img-caption">Fig. 1. Overview of the EcoDetect pipeline: LLM prompt generation → synthetic image generation → annotation &amp; augmentation → YOLOv11n fine-tuning → real-world evaluation.</p>
+  </div>
+
+  <hr>
+
+  <!-- SYNTHETIC SAMPLES -->
+  <h2>Synthetic Data Samples</h2>
+  <p>
+    A total of 415 high-resolution synthetic images were generated using structured LLM prompts. Prompts described diverse settings (parks, offices, sidewalks), lighting conditions, object positions, and background clutter to ensure class coverage and scene variety.
+  </p>
+
+  <!-- TODO: Replace src values with your actual synthetic sample images -->
+  <div class="synth-grid">
+    <div>
+      <img src="static/images/synth1.png" alt="Synthetic sample 1"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="img-placeholder" style="display:none;">synth1.png</div>
+    </div>
+    <div>
+      <img src="static/images/synth2.png" alt="Synthetic sample 2"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="img-placeholder" style="display:none;">synth2.png</div>
+    </div>
+    <div>
+      <img src="static/images/synth3.png" alt="Synthetic sample 3"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="img-placeholder" style="display:none;">synth3.png</div>
+    </div>
+  </div>
+  <p class="img-caption">Fig. 2. Example synthetic images generated using LLM-guided prompt engineering, showing plastic, paper, and aluminum waste in varied real-world scenes.</p>
+
+  <hr>
+
+  <!-- RESULTS -->
+  <h2>Results</h2>
+  <p>Evaluated on 75 real-world images (354 annotated instances) held out entirely from training. Three independent seeds confirm robustness: averaged mAP@0.5 of <strong>0.799 ± 0.008</strong>.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Class</th>
+        <th>Precision</th>
+        <th>Recall</th>
+        <th>mAP@0.5</th>
+        <th>mAP@0.5:0.95</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Aluminum</td><td>0.799</td><td>0.824</td><td>0.829</td><td>0.622</td></tr>
+      <tr><td>Paper</td><td>0.782</td><td>0.629</td><td>0.734</td><td>0.573</td></tr>
+      <tr><td>Plastic</td><td>0.785</td><td>0.840</td><td>0.871</td><td>0.677</td></tr>
+      <tr class="avg"><td>Average</td><td>0.789</td><td>0.765</td><td>0.811</td><td>0.624</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TODO: Replace with your inference result image (e.g. Fig. 5 from the paper) -->
+  <div class="img-block" style="margin-top:1.5rem;">
+    <img src="static/images/inference.png"
+         alt="Inference result on real-world image"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="img-placeholder" style="display:none;">
+      Add inference result image here<br>
+      <code style="font-size:0.75rem;margin-top:0.4rem;">static/images/inference.png</code>
+    </div>
+    <p class="img-caption">Fig. 3. Inference on a held-out real-world image. Bounding boxes with class labels and confidence scores are shown for plastic, aluminum, and paper.</p>
+  </div>
+
+  <hr>
+
+  <!-- COMPARISON -->
+  <h2>Comparison</h2>
+  <p>EcoDetect is the only model combining synthetic-only training with edge-ready architecture at competitive accuracy, while using 90% fewer computations than YOLOv8-CBAM.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Model</th>
+        <th>Params (M)</th>
+        <th>GFLOPs</th>
+        <th>mAP@0.5</th>
+        <th>Synth. Only</th>
+        <th>Edge Ready</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>YOLOv8-CBAM</td><td>25.3</td><td>15.8</td><td>0.78</td><td>✗</td><td>✗</td></tr>
+      <tr><td>YOLO EC</td><td>12.1</td><td>8.6</td><td>0.74</td><td>✗</td><td>✓</td></tr>
+      <tr><td>MRS-YOLO</td><td>10.6</td><td>6.9</td><td>0.77</td><td>✗</td><td>✓</td></tr>
+      <tr><td>YOLOv11x</td><td>68.2</td><td>126.7</td><td>0.82</td><td>✓</td><td>✓</td></tr>
+      <tr class="avg"><td>EcoDetect (ours)</td><td>2.59</td><td>6.4</td><td>0.81</td><td>✓</td><td>✓</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <!-- BIBTEX -->
+  <h2>BibTeX</h2>
+  <div class="bibtex-wrap">
+    <pre id="bibtex">@INPROCEEDINGS{11491266,
+  author    = {Farabi, Ahsan and Minhaz, Md. Abdul Ahad and
+               Khandaker, Israt and Shanto, Ibrahim Khalil and
+               Raihan, Md. Tanvir},
+  booktitle = {2025 28th International Conference on Computer
+               and Information Technology (ICCIT)},
+  title     = {EcoDetect: Lightweight Real-Time Recyclable Waste
+               Detection Using YOLOv11n Trained on
+               LLM-Guided Synthetic Data},
+  year      = {2025},
+  pages     = {66--71},
+  doi       = {10.1109/ICCIT68739.2025.11491266}
+}</pre>
+    <button class="copy-btn" onclick="copyBib()">Copy</button>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>
+      Code &amp; dataset: <a href="https://github.com/TheAhsanFarabi/EcoDetect" target="_blank">github.com/TheAhsanFarabi/EcoDetect</a>
+      &nbsp;·&nbsp;
+      DOI: <a href="https://doi.org/10.1109/ICCIT68739.2025.11491266" target="_blank">10.1109/ICCIT68739.2025.11491266</a>
+    </p>
+    <p style="margin-top:0.5rem;">
+      Built with the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.
+      Licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
+    </p>
+  </div>
+
+</div>
+
+<script>
+  function copyBib() {
+    const text = document.getElementById('bibtex').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+</script>
+</body>
+</html>
